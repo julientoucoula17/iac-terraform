@@ -3,7 +3,7 @@ variable "location" {
     }
 
 variable "name" {
-    default = "rg1"
+    default = "iac-infra"
     }
 
 
