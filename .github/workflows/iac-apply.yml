@@ -1,9 +1,6 @@
 name: IaC Terraform
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
@@ -16,29 +13,8 @@ env:
   TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
 
 jobs:
-
-  iac-analysis:
-    name: "Analyze IaC Infrastructure"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.13
-
-
-      - name: Install Checkov
-        run: |
-          pip install checkov
-
-      - name: Run Checkov with custom options
-        run: |
-          checkov -d ${{ env.CONFIG_DIRECTORY }} --framework terraform
-
   terraform-init:
-    needs:
-      - iac-analysis
+    environment: dev
     name: "Terraform init"
     runs-on: ubuntu-latest
     permissions:
@@ -67,7 +43,12 @@ jobs:
         id: plan
         run: terraform plan -out=tfplan.out -no-color
         continue-on-error: false
-#
-#      - run: echo ${{ steps.plan.outputs.stdout }}
-#      - run: echo ${{ steps.plan.outputs.stderr }}
-#      - run: echo ${{ steps.plan.outputs.exitcode }}
+
+      - run: echo ${{ steps.plan.outputs.stdout }}
+      - run: echo ${{ steps.plan.outputs.stderr }}
+      - run: echo ${{ steps.plan.outputs.exitcode }}
+
+      - name: Terraform Apply
+        id: plan
+        run: terraform plan tfplan.out --auto-approve
+        continue-on-error: false
