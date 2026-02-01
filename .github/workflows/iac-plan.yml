@@ -1,76 +1,76 @@
-name: IaC Terraform
-
-on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
-
-env:
-  CONFIG_DIRECTORY: "./"
-  TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
-  TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
-  TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
-  TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
-  TF_API_TOKEN: ${{ secrets.TF_TOKEN }}
-
-jobs:
-
-  iac-analysis:
-    name: "Analyze IaC Infrastructure"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.13
-
-
-      - name: Install Checkov
-        run: |
-          pip install checkov
-
-      - name: Run Checkov with custom options
-        run: |
-          checkov -d ${{ env.CONFIG_DIRECTORY }} --framework terraform
-
-  terraform-init:
-    env:
-      TF_API_TOKEN: ${{ secrets.TF_TOKEN }}
-    needs:
-      - iac-analysis
-    name: "Terraform init"
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.13.5"
-
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
-
-      - run: terraform init
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=tfplan.out -no-color
-        continue-on-error: false
+#name: IaC Terraform
 #
-#      - run: echo ${{ steps.plan.outputs.stdout }}
-#      - run: echo ${{ steps.plan.outputs.stderr }}
-#      - run: echo ${{ steps.plan.outputs.exitcode }}
+#on:
+#  pull_request:
+#    branches:
+#      - main
+#  push:
+#    branches:
+#      - main
+#
+#env:
+#  CONFIG_DIRECTORY: "./"
+#  TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+#  TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+#  TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+#  TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
+#  TF_API_TOKEN: ${{ secrets.TF_TOKEN }}
+#
+#jobs:
+#
+#  iac-analysis:
+#    name: "Analyze IaC Infrastructure"
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v6
+#      - name: Set up Python 3.13
+#        uses: actions/setup-python@v6
+#        with:
+#          python-version: 3.13
+#
+#
+#      - name: Install Checkov
+#        run: |
+#          pip install checkov
+#
+#      - name: Run Checkov with custom options
+#        run: |
+#          checkov -d ${{ env.CONFIG_DIRECTORY }} --framework terraform
+#
+#  terraform-init:
+#    env:
+#      TF_API_TOKEN: ${{ secrets.TF_TOKEN }}
+#    needs:
+#      - iac-analysis
+#    name: "Terraform init"
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      pull-requests: write
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v6
+#
+#      - uses: hashicorp/setup-terraform@v3
+#        with:
+#          terraform_version: "1.13.5"
+#
+#      - name: Terraform fmt
+#        id: fmt
+#        run: terraform fmt -check
+#        continue-on-error: true
+#
+#      - run: terraform init
+#
+#      - name: Terraform Validate
+#        id: validate
+#        run: terraform validate -no-color
+#
+#      - name: Terraform Plan
+#        id: plan
+#        run: terraform plan -out=tfplan.out -no-color
+#        continue-on-error: false
+##
+##      - run: echo ${{ steps.plan.outputs.stdout }}
+##      - run: echo ${{ steps.plan.outputs.stderr }}
+##      - run: echo ${{ steps.plan.outputs.exitcode }}

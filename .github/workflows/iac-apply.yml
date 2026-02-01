@@ -1,54 +1,54 @@
-name: IaC Terraform
-
-on:
-  push:
-    branches:
-      - main
-
-env:
-  CONFIG_DIRECTORY: "./"
-  TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
-  TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
-  TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
-  TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
-
-jobs:
-  terraform-init:
-    environment: dev
-    name: "Terraform init"
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.13.5"
-
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
-
-      - run: terraform init
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -out=tfplan.out -no-color
-        continue-on-error: false
-
-      - run: echo ${{ steps.plan.outputs.stdout }}
-      - run: echo ${{ steps.plan.outputs.stderr }}
-      - run: echo ${{ steps.plan.outputs.exitcode }}
-
-      - name: Terraform Apply
-        id: apply
-        run: terraform plan tfplan.out --auto-approve
-        continue-on-error: false
+#name: IaC Terraform
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#env:
+#  CONFIG_DIRECTORY: "./"
+#  TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+#  TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+#  TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+#  TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
+#
+#jobs:
+#  terraform-init:
+#    environment: dev
+#    name: "Terraform init"
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      pull-requests: write
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v6
+#
+#      - uses: hashicorp/setup-terraform@v3
+#        with:
+#          terraform_version: "1.13.5"
+#
+#      - name: Terraform fmt
+#        id: fmt
+#        run: terraform fmt -check
+#        continue-on-error: true
+#
+#      - run: terraform init
+#
+#      - name: Terraform Validate
+#        id: validate
+#        run: terraform validate -no-color
+#
+#      - name: Terraform Plan
+#        id: plan
+#        run: terraform plan -out=tfplan.out -no-color
+#        continue-on-error: false
+#
+#      - run: echo ${{ steps.plan.outputs.stdout }}
+#      - run: echo ${{ steps.plan.outputs.stderr }}
+#      - run: echo ${{ steps.plan.outputs.exitcode }}
+#
+#      - name: Terraform Apply
+#        id: apply
+#        run: terraform plan tfplan.out --auto-approve
+#        continue-on-error: false
