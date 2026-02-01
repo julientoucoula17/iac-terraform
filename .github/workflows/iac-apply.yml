@@ -49,6 +49,6 @@ jobs:
       - run: echo ${{ steps.plan.outputs.exitcode }}
 
       - name: Terraform Apply
-        id: plan
+        id: apply
         run: terraform plan tfplan.out --auto-approve
         continue-on-error: false
