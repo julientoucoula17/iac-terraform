@@ -10,12 +10,21 @@ terraform {
     path = "states/local.tfstate"
   }*/
 
-  backend "azurerm" {
-    resource_group_name = "terraform-rg"
-    storage_account_name = "tfstatetclstorageaccount"
-    container_name = "terraformstate"
-    key = "dev/terraform.tfstate"
-  }
+  # backend "azurerm" {
+  #   resource_group_name = "terraform-rg"
+  #   storage_account_name = "tfstatetclstorageaccount"
+  #   container_name = "terraformstate"
+  #   key = "dev/terraform.tfstate"
+  # }
+
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "TCLJ"
+    workspaces {
+    name = "iac-terraform"
+    }
+}
+
 
   required_version = ">= 1.2.0"
 }
