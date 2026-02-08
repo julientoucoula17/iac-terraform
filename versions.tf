@@ -1,12 +1,12 @@
 terraform {
   required_providers {
     azurerm = {
-    source = "hashicorp/azurerm"
-    version = "4.58.0"
-      }
+      source  = "hashicorp/azurerm"
+      version = "4.58.0"
+    }
   }
 
-/*  backend "local" {
+  /*  backend "local" {
     path = "states/local.tfstate"
   }*/
 
@@ -18,12 +18,12 @@ terraform {
   # }
 
   backend "remote" {
-    hostname = "app.terraform.io"
+    hostname     = "app.terraform.io"
     organization = "TCLJ"
     workspaces {
-    name = "iac-terraform"
+      name = "iac-terraform"
     }
-}
+  }
 
 
   required_version = ">= 1.2.0"
