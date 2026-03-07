@@ -14,13 +14,13 @@ resource "azurerm_linux_web_app" "web_app" {
   public_network_access_enabled = var.public_network_access_enabled
 
   site_config {
+    websockets_enabled = true
     application_stack{
-      python_version = var.python_version
+      docker_image_name   = "julientoucoula17/taskflow:latest"
+      docker_registry_url = "https://index.docker.io"
+    }
+    app_command_line = ""
     }
 
-  }
-
   app_settings = var.app_settings
-
-
 }

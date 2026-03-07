@@ -4,27 +4,30 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "4.58.0"
     }
+
+    tls = {
+      source  = "hashicorp/tls"
+      version = ">= 4.2.1"
+    }
+
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.8.1"
+    }
+
+    null = {
+      source  = "hashicorp/null"
+      version = ">= 3.2.4"
+    }
   }
-
-  /*  backend "local" {
-    path = "states/local.tfstate"
-  }*/
-
-  # backend "azurerm" {
-  #   resource_group_name = "terraform-rg"
-  #   storage_account_name = "tfstatetclstorageaccount"
-  #   container_name = "terraformstate"
-  #   key = "dev/terraform.tfstate"
-  # }
 
   backend "remote" {
     hostname     = "app.terraform.io"
     organization = "TCLJ"
     workspaces {
-      name = "iac-terraform"
+      name = "iac-terraform-intro-cli"
     }
   }
-
 
   required_version = ">= 1.2.0"
 }
