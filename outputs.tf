@@ -11,5 +11,13 @@ output "app_service_plan_id" {
 }
 
 output "linux_web_app_default_hostname" {
-  value = module.linux-webapp-1.default_hostname
+  value = "https://${module.linux-webapp-1.default_hostname}"
+}
+
+output "mysql_fqdn" {
+  value = module.mysql.mysql_server_fqdn
+}
+
+output "web_app_ip_address" {
+  value = module.linux-webapp-1.web_app_ip_address[0]
 }
