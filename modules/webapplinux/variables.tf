@@ -16,9 +16,16 @@ variable "python_version" {
 }
 
 variable "public_network_access_enabled" {
+  description = "Accessibilité via Internet ou pas"
   default = false
 }
 
-variable "app_settings" {
+variable "docker_image_name" {}
 
+variable "docker_registry_url" {
+  default = "https://index.docker.io"
+}
+
+variable "app_settings" {
+  default = {}
 }
